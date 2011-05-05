@@ -1,0 +1,36 @@
+$def with (session, content)
+
+<html>
+	<head>
+		<!--
+		<link rel="stylesheet" href="/static/main.css" type="text/css" />
+		-->
+		<title>VT Course Search</title>
+		<link rel="stylesheet" href="/static/layout.css" type="text/css" />
+	</head>
+	<body>
+	<div id="container">
+		<div id="header">
+			<h1>
+				VT Course Search
+			</h1>
+		</div>
+		<div id="navigation">
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/about">About</a></li>
+				$if session.login == 0:
+					<li><a href="/login">Login</a></li>
+				$else:
+					<li><a href="/logout">Logout</a></li>
+			</ul>
+		</div>
+		<div id="content">
+			$:content
+		</div>
+		<div id="footer">
+			Provided by <a href="mailto:niothiel@gmail.com">Niothiel</a>
+		</div>
+	</div>
+	</body>
+</html>
