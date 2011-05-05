@@ -3,17 +3,28 @@ import web
 urls = (
 	'/', 'index',
 	'/add', 'add',
-	'/main.css', 'static'
+	'/login', 'login',
+	'/logout', 'logout',
+	'/about', 'about'
 )
 
 app = web.application(urls, globals())
 render = web.template.render('./templates/')
 db = web.database(dbn='mysql', db='VTCS')
 
+# Workaround with Debug mode because of reloader issues
+if web.config.get('_session') is None:
+	session = web.session.Session(app, web.session.DiskStore('sessions'), initializer = {'login': 0})
+	web.config._session = session
+else:
+	session = web.config._session
+
 class index:
 	def GET(self):
 		courses = db.select('Courses')
-		return render.index(courses)
+
+		body = render.index(courses);
+		return render.skeleton(session, body)
 
 class add:
 	def POST(self):
@@ -21,11 +32,31 @@ class add:
 		n = db.insert('Courses', email=i.email, crn=i.crn)
 		raise web.seeother('/')
 
-class static:
+class login:
 	def GET(self):
-		fh = file('main.css', 'r')
-		return fh.read();
-		
+		body = render.login()
+		return render.skeleton(session, body)
+
+	def POST(self):
+		email = web.input().email
+		passwd = web.input().passwd
+
+		sqlStatement = "SELECT * FROM Users WHERE email='" + email + "' AND pass='" + passwd + "'"
+		ident = db.query(sqlStatement)
+
+		session.login = len(ident)
+
+		web.seeother('/')
+
+class logout:
+	def GET(self):
+		session.kill();
+		web.seeother('/')
+
+class about:
+	def GET(self):
+		body = "The about page is coming soon. :)"
+		return render.skeleton(session, body)
 
 if __name__ == "__main__":
 	app.run()
