@@ -1,0 +1,54 @@
+$def with (terms)
+
+<h2>
+	Add Courses
+</h2>
+
+<script type="text/javascript">
+	var counter = 1;
+	var limit = 10;
+	function addInput(divName){
+		 if (counter == limit)  {}
+		 else {
+		      var newdiv = document.createElement('div');
+		      newdiv.innerHTML = "Entry " + (counter + 1) + " <br><input type='text' name='myInputs[]'>";
+		      document.getElementById(divName).appendChild(newdiv);
+		      counter++;
+		 }
+	}	
+</script>
+
+
+<form action=/add method=POST>
+	<table id="login">
+		<tr>
+			<td>Term: </td>
+			<td>
+				<select name="term">
+				$for entry in terms:
+					<option value="$entry['value']">$entry['text']</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Course 1 CRN: </td>
+			<td><input type=text name="crn1"</td>
+		</tr>
+		<tr>
+			<td>Course 2 CRN: </td>
+			<td><input type=text name="crn2"></td>
+		</tr>
+		<tr>
+			<td>Course 3 CRN: </td>
+			<td><input type=text name="crn3"></td>
+		</tr>
+		<tr>
+			<td>Course 4 CRN: </td>
+			<td><input type=text name="crn4"></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td><input type=submit value="Submit"></td>
+		</tr>
+	</table>
+</form>

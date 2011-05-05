@@ -1,4 +1,5 @@
 import web
+from csadapter import *
 
 urls = (
 	'/', 'index',
@@ -12,6 +13,7 @@ urls = (
 app = web.application(urls, globals())
 render = web.template.render('./templates/')
 db = web.database(dbn='mysql', db='VTCS')
+cs = CSAdapter()
 
 # Workaround with Debug mode because of reloader issues
 if web.config.get('_session') is None:
@@ -61,10 +63,11 @@ class about:
 
 class add:
 	def GET(self):
-		body = "Coming soon."
+		body = render.add(cs.getTerms())
 		return render.skeleton(session, body)
+
 	def POST(self):
-		ibody = "Coming soon."
+		body = "Coming soon."
 		return render.skeleton(session, body)
 
 class status:
