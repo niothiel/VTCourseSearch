@@ -1,3 +1,5 @@
+DROP TABLE VTCS.Users;
+
 CREATE TABLE VTCS.Users (
 	id integer primary key auto_increment,
 	email text not null,
