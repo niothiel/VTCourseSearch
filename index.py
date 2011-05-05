@@ -2,10 +2,11 @@ import web
 
 urls = (
 	'/', 'index',
-	'/add', 'add',
 	'/login', 'login',
 	'/logout', 'logout',
-	'/about', 'about'
+	'/about', 'about',
+	'/add', 'add',
+	'/status', 'status'
 )
 
 app = web.application(urls, globals())
@@ -26,12 +27,6 @@ class index:
 		body = render.index(courses);
 		return render.skeleton(session, body)
 
-class add:
-	def POST(self):
-		i = web.input()
-		n = db.insert('Courses', email=i.email, crn=i.crn)
-		raise web.seeother('/')
-
 class login:
 	def GET(self):
 		body = render.login()
@@ -45,8 +40,14 @@ class login:
 		ident = db.query(sqlStatement)
 
 		session.login = len(ident)
+		session.email = email
 
-		web.seeother('/')
+		if session.login == 1:
+			body = render.login_success()
+		else:
+			body = render.login_failure()
+		
+		return render.skeleton(session, body)
 
 class logout:
 	def GET(self):
@@ -55,7 +56,20 @@ class logout:
 
 class about:
 	def GET(self):
-		body = "The about page is coming soon. :)"
+		body = render.about();
+		return render.skeleton(session, body)
+
+class add:
+	def GET(self):
+		body = "Coming soon."
+		return render.skeleton(session, body)
+	def POST(self):
+		ibody = "Coming soon."
+		return render.skeleton(session, body)
+
+class status:
+	def GET(self):
+		body = "Coming soon."
 		return render.skeleton(session, body)
 
 if __name__ == "__main__":
