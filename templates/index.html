@@ -1,0 +1,66 @@
+$def with (courses)
+
+<html>
+	<head>
+		<!--
+		<link rel="stylesheet" href="/static/main.css" type="text/css" />
+		-->
+		<link rel="stylesheet" href="/static/layout.css" type="text/css" />
+	</head>
+	<body>
+	<div id="container">
+		<div id="header">
+			<h1>
+				VT Course Search
+			</h1>
+		</div>
+		<div id="navigation">
+			<ul>
+				<li><a href="#">Home</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Services</a></li>
+				<li><a href="#">Contact us</a></li>
+			</ul>
+		</div>
+		<div id="content">
+			<!--
+			<h2>
+				Page heading
+			</h2>
+			-->
+			<table>
+				<thread>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">E-Mail</th>
+						<th scope="col">CRN</th>
+						<th scope="col">Created</th>
+						<th scope="col">Done</th>
+					</tr>
+				</thread>
+				<tbody>
+					$for course in courses:
+					<tr>
+						<td>$course.id</td>
+						<td>$course.email</td>
+						<td>$course.crn</td>
+						<td>$course.created</td>
+						<td>$course.done</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<form method="post" action="add">
+			<p>
+				<input type="text" name="email" />
+				<input type="text" name="crn" />
+				<input type="submit" value="Add" />
+			</p>
+			</form>
+		</div>
+		<div id="footer">
+			Provided by <a href="mailto:niothiel@gmail.com">Niothiel</a>
+		</div>
+	</div>
+	</body>
+</html>
