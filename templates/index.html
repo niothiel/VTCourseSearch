@@ -1,31 +1,27 @@
-$def with (courses)
+<h2>
+	Welcome!
+</h2>
 
-			<table>
-				<thread>
-					<tr>
-						<th scope="col">Id</th>
-						<th scope="col">E-Mail</th>
-						<th scope="col">CRN</th>
-						<th scope="col">Created</th>
-						<th scope="col">Done</th>
-					</tr>
-				</thread>
-				<tbody>
-					$for course in courses:
-					<tr>
-						<td>$course.id</td>
-						<td>$course.email</td>
-						<td>$course.crn</td>
-						<td>$course.created</td>
-						<td>$course.done</td>
-					</tr>
-				</tbody>
-			</table>
+<p>
+	VT Course search is a site designed to help students with the drop/add portion of course selection. It allows students to select courses they wish to take during a particular term, and VT Course Search automatically notifies the student when the course becomes available via email.
+</p>
+<br>
+<h2>
+	Getting Started
+</h2>
+<p>
+	To get started, you should first click the "Register" link on the navigation bar. Registation is painless and simple, but required for email notifications to work.
+</p>
+<br>
+<p>
+	After you've registered and logged in, you will need the CRNs for the courses you wish to take. Click on "Add Courses" and input the CRNs you wish VT Course Search to track for you. When a course becomes available, you will be notified via email.<br><br>
+Check the "Status" page to manage and view the status of your currently watched courses. 
+</p>
+<br>
 
-			<form method="post" action="/add">
-			<p>
-				<input type="text" name="email" />
-				<input type="text" name="crn" />
-				<input type="submit" value="Add" />
-			</p>
-			</form>
+<h2>
+	Contribute!
+</h2>
+<p>
+	If this site helped you get a course or two you needed, spread the word! Tell all your friends about it!<br>The code for the project is open-source, available at <a href="https://github.com/niothiel/VTCourseSearch">Github</a>. Pull requests are always welcome. :)
+</p>
