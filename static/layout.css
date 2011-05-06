@@ -73,3 +73,10 @@ body
 	text-align: right;
 	padding: 7px;
 }
+
+label.error
+{
+	color: #EA5200;
+	font-weight: bold;
+	padding-left: 5px;
+}
