@@ -4,23 +4,29 @@ $def with (terms)
 	Add Courses
 </h2>
 
+<a href="#" onclick="addInput('crn-list')">Add more courses</a><br><br>
+
 <script type="text/javascript">
-	var counter = 1;
+	var counter = 2;
 	var limit = 10;
-	function addInput(divName){
-		 if (counter == limit)  {}
-		 else {
-		      var newdiv = document.createElement('div');
-		      newdiv.innerHTML = "Entry " + (counter + 1) + " <br><input type='text' name='myInputs[]'>";
-		      document.getElementById(divName).appendChild(newdiv);
-		      counter++;
-		 }
-	}	
+	function addInput() {
+		if (counter > limit) {}
+		else {
+			var table = document.getElementById("login-table");
+			var row = table.insertRow(table.rows.length - 1);
+
+			var cell0 = row.insertCell(0);
+			cell0.innerHTML = "Course " + counter + " CRN: ";
+
+			var cell1 = row.insertCell(1);
+			cell1.innerHTML = "<input type=text name='crn" + counter + "'>"
+			counter++;
+		}
+	}
 </script>
 
-
 <form action=/add method=POST>
-	<table id="login">
+	<table id="login-table">
 		<tr>
 			<td>Term: </td>
 			<td>
@@ -32,19 +38,7 @@ $def with (terms)
 		</tr>
 		<tr>
 			<td>Course 1 CRN: </td>
-			<td><input type=text name="crn1"</td>
-		</tr>
-		<tr>
-			<td>Course 2 CRN: </td>
-			<td><input type=text name="crn2"></td>
-		</tr>
-		<tr>
-			<td>Course 3 CRN: </td>
-			<td><input type=text name="crn3"></td>
-		</tr>
-		<tr>
-			<td>Course 4 CRN: </td>
-			<td><input type=text name="crn4"></td>
+			<td><input type=text name="crn1"></td>
 		</tr>
 		<tr>
 			<td></td>
