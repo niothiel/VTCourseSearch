@@ -20,6 +20,7 @@ $def with (session, content)
 				<li><a href="/">Home</a></li>
 				<li><a href="/about">About</a></li>
 				$if session.login == 0:
+					<li><a href="/register">Register</a></li>
 					<li><a href="/login">Login</a></li>
 				$else:
 					<li><a href="/status">Status</a></li>

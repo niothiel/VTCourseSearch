@@ -1,10 +1,12 @@
 import web
 from csadapter import *
+from dbadapter import *
 
 urls = (
 	'/', 'index',
 	'/login', 'login',
 	'/logout', 'logout',
+	'/register', 'register',
 	'/about', 'about',
 	'/add', 'add',
 	'/status', 'status'
@@ -12,7 +14,8 @@ urls = (
 
 app = web.application(urls, globals())
 render = web.template.render('./templates/')
-db = web.database(dbn='mysql', db='VTCS')
+#dbobj = web.database(dbn='mysql', db='VTCS')
+db = DBAdapter( web.database(dbn='mysql', db='VTCS') )
 cs = CSAdapter()
 
 # Workaround with Debug mode because of reloader issues
@@ -24,9 +27,9 @@ else:
 
 class index:
 	def GET(self):
-		courses = db.select('Courses')
-
-		body = render.index(courses);
+		#courses = db.select('Courses')
+		#body = render.index(courses);
+		body = "An Intro and directions should go here."
 		return render.skeleton(session, body)
 
 class login:
@@ -38,15 +41,15 @@ class login:
 		email = web.input().email
 		passwd = web.input().passwd
 
-		sqlStatement = "SELECT * FROM Users WHERE email='" + email + "' AND pass='" + passwd + "'"
-		ident = db.query(sqlStatement)
+		result = db.login(email, passwd)
 
-		session.login = len(ident)
-		session.email = email
-
-		if session.login == 1:
+		if result:
+			session.login = 1
+			session.email = email
 			body = render.login_success()
 		else:
+			session.login = 0
+			session.email = None
 			body = render.login_failure()
 		
 		return render.skeleton(session, body)
@@ -55,6 +58,11 @@ class logout:
 	def GET(self):
 		session.kill();
 		web.seeother('/')
+
+class register:
+	def GET(self):
+		body = render.register();
+		return render.skeleton(session, body);
 
 class about:
 	def GET(self):
@@ -67,7 +75,13 @@ class add:
 		return render.skeleton(session, body)
 
 	def POST(self):
-		body = "Coming soon."
+		body = "Coming soon.<br>"
+
+		for entry in web.input():
+			body += entry + '='
+			body += web.input()[entry]
+			body += '<br>'
+		
 		return render.skeleton(session, body)
 
 class status:
