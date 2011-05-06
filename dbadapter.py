@@ -1,12 +1,13 @@
+from web.db import sqlquote
+
 class DBAdapter:
 	def __init__(self, db):
 		self.db = db
 
-	# TODO: Fix the fucking sql injection
 	def login(self, email, passwd):
-		args = {'email': email, 'passwd': passwd}
-		ident = self.db.query("SELECT * FROM Users WHERE email='" + \
-			email + "' AND pass='" + passwd + "'")
+		myvars = {'email': email, 'passwd': passwd}
+		ident = self.db.select("Users", myvars, \
+			where="email=$email AND pass=$passwd")
 
 		if len(ident) == 1:
 			return True
@@ -21,12 +22,16 @@ class DBAdapter:
 		return True;
 	
 	def _checkcourse(self, email, crn, term):
-		courses = self.db.query("SELECT * FROM Courses WHERE email='%s' AND crn='%s' AND term='%s'" % (email, crn, term))
+		myvars = {'email': email, 'crn': crn, 'term': term}
+		courses = self.db.select("Courses", myvars, \
+			where="email=$email AND crn=$crn AND term=$term")
+
 		if len(courses) != 0:
 			return False
 		else:
 			return True
 
 	def getcourses(self, email):
-		courses = self.db.query("SELECT * FROM Courses WHERE email='%s'" % email)
+		courses = self.db.select("Courses", dict(email = email), \
+			where="email=$email")
 		return courses
