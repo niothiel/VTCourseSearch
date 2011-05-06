@@ -1,5 +1,39 @@
 $def with (terms)
 
+<script type="text/javascript" src="/static/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="/static/jquery-1.8.validate.min.js"></script>
+
+<script type="text/javascript">
+	$$(document).ready(function() {
+		$$("#faddcourses").validate({
+			rules: {
+				crn1: { digits: true, min: 10000, max: 99999 },
+				crn2: { digits: true, min: 10000, max: 99999 },
+				crn3: { digits: true, min: 10000, max: 99999 },
+				crn4: { digits: true, min: 10000, max: 99999 },
+				crn5: { digits: true, min: 10000, max: 99999 },
+				crn6: { digits: true, min: 10000, max: 99999 },
+				crn7: { digits: true, min: 10000, max: 99999 },
+				crn8: { digits: true, min: 10000, max: 99999 },
+				crn9: { digits: true, min: 10000, max: 99999 },
+				crn10: { digits: true, min: 10000, max: 99999 }
+			},
+			messages: {
+				crn1: "Please enter a valid CRN.",
+				crn2: "Please enter a valid CRN.",
+				crn3: "Please enter a valid CRN.",
+				crn4: "Please enter a valid CRN.",
+				crn5: "Please enter a valid CRN.",
+				crn6: "Please enter a valid CRN.",
+				crn7: "Please enter a valid CRN.",
+				crn8: "Please enter a valid CRN.",
+				crn9: "Please enter a valid CRN.",
+				crn10: "Please enter a valid CRN."
+			}
+		});
+	});
+</script>
+
 <h2>
 	Add Courses
 </h2>
@@ -25,7 +59,7 @@ $def with (terms)
 	}
 </script>
 
-<form action=/add method=POST>
+<form id="faddcourses" action=/add method="POST">
 	<table id="login-table">
 		<tr>
 			<td>Term: </td>
