@@ -1,8 +1,27 @@
+<script type="text/javascript" src="/static/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="/static/jquery-1.8.validate.min.js"></script>
+
+<script type="text/javascript">
+	$$(document).ready(function() {
+		$$("#flogin").validate({
+			rules: {
+				email: {
+					required: true,
+					email: true
+				},
+				passwd: {
+					required: true
+				}
+			}
+		});
+	});
+</script>
+
 <h2>
 	Login
 </h2>
-<form action=/login method=POST>
-	<table id="login">
+<form id="flogin" action="" method=POST>
+	<table>
 		<tr>
 			<td>Email: </td>
 			<td><input type=text name="email"></td>
