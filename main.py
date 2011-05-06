@@ -3,7 +3,7 @@ from csadapter import *
 from dbadapter import *
 
 # For testing
-import cgi
+from cgi import escape
 
 urls = (
 	'/', 'index',
@@ -110,7 +110,7 @@ class status:
 		body = ""
 		for course in courses:
 			strcourse = str(course)
-			body += cgi.escape(strcourse)
+			body += escape(strcourse)
 			body += "<br>"
 
 		return render.skeleton(session, body)
