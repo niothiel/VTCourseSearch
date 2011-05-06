@@ -30,9 +30,7 @@ else:
 
 class index:
 	def GET(self):
-		#courses = db.select('Courses')
-		#body = render.index(courses);
-		body = "An Intro and directions should go here."
+		body = render.index()
 		return render.skeleton(session, body)
 
 class login:
@@ -96,7 +94,7 @@ class add:
 
 		email = session.email
 		for crn in crns:
-			result = db.addclass(email, crn, term)
+			result = db.addcourse(email, crn, term)
 			if not result:
 				body = "An error has occured (Duplicate course?)"
 				return render.skeleton(session, body)
@@ -107,12 +105,13 @@ class add:
 class status:
 	def GET(self):
 		courses = db.getcourses(session.email)
-		body = ""
+		coursecontent = ""
 		for course in courses:
 			strcourse = str(course)
-			body += escape(strcourse)
-			body += "<br>"
+			coursecontent += escape(strcourse)
+			coursecontent += "<br>"
 
+		body = render.status(coursecontent)
 		return render.skeleton(session, body)
 
 if __name__ == "__main__":
