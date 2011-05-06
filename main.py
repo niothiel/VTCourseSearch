@@ -108,7 +108,10 @@ class status:
 		coursecontent = ""
 		for course in courses:
 			strcourse = str(course)
+			avail = cs.crnAvailable(course['term'], course['crn'])
 			coursecontent += escape(strcourse)
+			coursecontent += "Available?"
+			coursecontent += str(avail)
 			coursecontent += "<br>"
 
 		body = render.status(coursecontent)
