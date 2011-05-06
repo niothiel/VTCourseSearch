@@ -2,6 +2,9 @@ import web
 from csadapter import *
 from dbadapter import *
 
+# For testing
+import cgi
+
 urls = (
 	'/', 'index',
 	'/login', 'login',
@@ -64,6 +67,10 @@ class register:
 		body = render.register();
 		return render.skeleton(session, body);
 
+	def POST(self):
+		body = "Coming soon.<br>"
+		return render.skeleton(session, body);
+
 class about:
 	def GET(self):
 		body = render.about();
@@ -75,18 +82,37 @@ class add:
 		return render.skeleton(session, body)
 
 	def POST(self):
-		body = "Coming soon.<br>"
+		data = web.input()
+
+		term = None
+		crns = []
 
 		for entry in web.input():
-			body += entry + '='
-			body += web.input()[entry]
-			body += '<br>'
+			if entry == 'term':
+				term = data[entry]
+			elif len(data[entry]) != 0:
+				crn = int(data[entry])
+				crns.append(crn)
+
+		email = session.email
+		for crn in crns:
+			result = db.addclass(email, crn, term)
+			if not result:
+				body = "An error has occured (Duplicate course?)"
+				return render.skeleton(session, body)
 		
+		body = "All classes have been added successfully. Please check the results on the Status page."
 		return render.skeleton(session, body)
 
 class status:
 	def GET(self):
-		body = "Coming soon."
+		courses = db.getcourses(session.email)
+		body = ""
+		for course in courses:
+			strcourse = str(course)
+			body += cgi.escape(strcourse)
+			body += "<br>"
+
 		return render.skeleton(session, body)
 
 if __name__ == "__main__":
