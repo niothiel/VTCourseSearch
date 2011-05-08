@@ -1,6 +1,7 @@
 import web
 from csadapter import *
 from dbadapter import *
+from validator import *
 
 # For testing
 from cgi import escape
@@ -20,6 +21,7 @@ render = web.template.render('./templates/')
 #dbobj = web.database(dbn='mysql', db='VTCS')
 db = DBAdapter( web.database(dbn='mysql', db='VTCS') )
 cs = CSAdapter()
+valid = Validator()
 
 # Workaround with Debug mode because of reloader issues
 if web.config.get('_session') is None:
@@ -30,7 +32,11 @@ else:
 
 class index:
 	def GET(self):
-		body = render.index()
+		#body = render.index()
+		body = ""
+		body += "niothiel@gmail.com: " + str(valid.email("niothiel@gmail.com")) + "<br>"
+		body += "asdf'@gmail.com: " + str(valid.email("asdf'@gmail.com")) + "<br>"
+		body += "asdf@a: " + str(valid.email("asdf@a")) + "<br>"
 		return render.skeleton(session, body)
 
 class login:
@@ -41,6 +47,9 @@ class login:
 	def POST(self):
 		email = web.input().email
 		passwd = web.input().passwd
+
+		if not valid.email(email):
+			body = render.login_failure()
 
 		result = db.login(email, passwd)
 
@@ -109,9 +118,12 @@ class status:
 		for course in courses:
 			strcourse = str(course)
 			avail = cs.crnAvailable(course['term'], course['crn'])
+			exist = cs.crnExists(course['term'], course['crn'])
 			coursecontent += escape(strcourse)
 			coursecontent += "Available?"
 			coursecontent += str(avail)
+			coursecontent += " Exists?"
+			coursecontent += str(exist)
 			coursecontent += "<br>"
 
 		body = render.status(coursecontent)
