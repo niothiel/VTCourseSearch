@@ -1,4 +1,4 @@
-$def with (content)
+$def with (courses, cs)
 
 <h2>
 	Status
@@ -7,4 +7,31 @@ $def with (content)
 	On this page you can check the status of your courses. If you wish to remove a course, click "Delete". Once this is done, the course will no longer be tracked. You are still free to readd it back at any time.
 </p>
 <br>
-$:content
+
+<table>
+	<thead>
+		<tr>
+			$for col in courses[0].keys():
+				<th>
+					$col
+				</th>
+			<th>Available</th>
+			<th>Exists</th>
+		</tr>
+	</thead>
+	<tbody>
+		$for course in courses:
+			<tr>
+				$for val in course.values():
+					<td>
+						$val
+					</td>
+				<td>
+					$cs.crnAvailable(course['term'], course['crn'])
+				</td>
+				<td>
+					$cs.crnExists(course['term'], course['crn'])
+				</td>
+			</tr>
+	</tbody>
+</table>

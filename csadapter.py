@@ -31,7 +31,6 @@ class CSAdapter:
 		soup = BeautifulSoup(html)
 
 		ref = soup.find("table", {"class": "dataentrytable"})
-		print ref
 		if ref == None or len(ref.contents) < 3:
 			return False
 		return True

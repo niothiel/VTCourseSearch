@@ -114,7 +114,10 @@ class add:
 class status:
 	def GET(self):
 		courses = db.getcourses(session.email)
+		
+		"""
 		coursecontent = ""
+
 		for course in courses:
 			strcourse = str(course)
 			avail = cs.crnAvailable(course['term'], course['crn'])
@@ -125,8 +128,8 @@ class status:
 			coursecontent += " Exists?"
 			coursecontent += str(exist)
 			coursecontent += "<br>"
-
-		body = render.status(coursecontent)
+		"""
+		body = render.status(courses, cs)
 		return render.skeleton(session, body)
 
 if __name__ == "__main__":
