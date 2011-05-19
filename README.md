@@ -14,7 +14,7 @@ First things first, pull the repo from github through the usual means.
 
 Next, since MySQLdb is being used, for the package to work correctly, one must install tow things (On Ubuntu):
 
-sudo apt-get install libmysqlclient15-dev python-dev
+	sudo apt-get install libmysqlclient15-dev python-dev
 
 Next install the dependencies using easy\_install, the required dependencies are located in dependencies.txt in the root folder.
 
