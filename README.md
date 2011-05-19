@@ -20,14 +20,14 @@ Next install the dependencies using easy\_install, the required dependencies are
 
 After this is done, the basic databases for mysql have to be created. The general syntax for running .sql scripts is the following:
 
-mysql -u [username] -p [pass] < [script-name-here].sql
+	mysql -u [username] -p [pass] < [script-name-here].sql
 
 
 Helpful tip:
 To save yourself a heartache, you can create a file named .my.cnf on the mysql box (can be the same as the web server box) in the home directory of the current user (~/.my.cnf) with the following text in it:
 
-[client]
-user="root"
-pass="[ROOT PASSWORD HERE]"
+	[client]
+	user="root"
+	pass="[ROOT PASSWORD HERE]"
 
 Then changing the permisssions of this file to 700. This allows for a passwordless login to the mysql instance, good for debugging but be mindful of security risks.
