@@ -1,5 +1,5 @@
 import re
-from lepl.apps.rfc3696 import Email
+#from lepl.apps.rfc3696 import Email
 
 class Validator:
 	def __init__(self):
@@ -14,4 +14,5 @@ class Validator:
 		return success
 
 	def email(self, email):
-		return Email()(email)
+		return re.match('[^@]+@[^@]+\.[^@]+', email) is not None
+		#return Email()(email)
