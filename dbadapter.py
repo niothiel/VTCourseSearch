@@ -6,12 +6,12 @@ from pymongo import MongoClient
 '''
 Data Layout:
 	email
-		passwd
-		phonenumber
-		courses (list)
-			crn
-			term
-			available
+	passwd
+	phone
+	courses (list)
+		crn
+		term
+		available
 
 '''
 
@@ -53,8 +53,7 @@ class MongoDBAdapter:
 			'email': email,
 			'passwd': passwd,
 			'courses': [],
-			'phone': phone,
-		    'available': False
+			'phone': phone
 		}
 		self.db.insert(row)
 
@@ -115,21 +114,7 @@ class MongoDBAdapter:
 		if not self._course_exists(email, crn, term):
 			return False
 
-		'''
-		update_data = {
-			'$pull': {
-				'courses': {
-					'crn': crn,
-				    'term': term
-				}
-			}
-		}
-
-		print self.db.update({'email': email}, update_data)
-		return True
-
-		'''
-		# Option 2, pulling the entry, modifying it, then saving it back
+		# Pulling the entry, modify it, then saving it back
 		row = self._get_row(email)
 
 		entry = {
@@ -137,12 +122,9 @@ class MongoDBAdapter:
 		    'term': term
 		}
 
+		# TODO: There has to be a better way to remove a specific element from a list...
 		to_remove = None
 		for course in row['courses']:
-			print 'List:', course['crn'], course['term']
-			print 'Ours:', crn, term
-			print type(course['crn']), type(course['term'])
-			print type(crn), type(term)
 			if course['crn'] == crn and course['term'] == term:
 				to_remove = course
 				break

@@ -73,7 +73,7 @@ class register:
 		passwd = web.input().passwd
 		phone = web.input().phone
 
-		body = '%s<br>%s<br>%s<br>' % (email, passwd, phone)
+		body = ''
 
 		if not valid.email(email):
 			body += 'The email you entered is invalid!'
