@@ -1,4 +1,4 @@
-$def with (courses, cs)
+$def with (courses)
 
 <h2>
 	Status
@@ -8,30 +8,29 @@ $def with (courses, cs)
 </p>
 <br>
 
-<table>
-	<thead>
-		<tr>
-			$for col in courses[0].keys():
-				<th>
-					$col
-				</th>
-			<th>Available</th>
-			<th>Exists</th>
-		</tr>
-	</thead>
-	<tbody>
-		$for course in courses:
-			<tr>
-				$for val in course.values():
-					<td>
-						$val
-					</td>
-				<td>
-					$cs.crnAvailable(course['term'], course['crn'])
-				</td>
-				<td>
-					$cs.crnExists(course['term'], course['crn'])
-				</td>
-			</tr>
-	</tbody>
-</table>
+$if len(courses) > 0:
+	<form id="fdelete" action="" method=POST>
+		<table>
+			<thead>
+				<tr>
+					<th>CRN</th>
+					<th>Available</th>
+					<th>Added</th>
+					<th>Delete?</th>
+				</tr>
+			</thead>
+			<tbody>
+				$for course in courses:
+					<tr>
+						<td>$course['crn']</td>
+						<td>$course['available']</td>
+						<td>$course['timeadded'].date()</td>
+						<!-- Gods of coding please don't kill me, I know that this is sloppy. -->
+						<td><input type="checkbox" name="$course['crn'],$course['term']" value="$course['crn'],$course['term']" /></td>
+					</tr>
+			</tbody>
+		</table>
+		<input type=submit value="Delete">
+	</form>
+$else:
+	You must first add some courses to the list!
