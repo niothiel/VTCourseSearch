@@ -1,3 +1,6 @@
 *.pyc
 env/*
 sessions/*
+.idea
+data.db
+gvoicelogin.txt
