@@ -21,13 +21,14 @@ $def with (session, content)
 			<ul>
 				<li><a href="/">Home</a></li>
 				<li><a href="/about">About</a></li>
-				$if session.login == 0:
-					<li><a href="/register">Register</a></li>
-					<li><a href="/login">Login</a></li>
-				$else:
+				$if session.login:
 					<li><a href="/status">Status</a></li>
 					<li><a href="/add">Add Courses</a></li>
 					<li><a href="/logout">Logout</a></li>
+					<!--<li>$session.email</li>-->
+				$else:
+					<li><a href="/register">Register</a></li>
+					<li><a href="/login">Login</a></li>
 			</ul>
 		</div>
 		<div id="content">
@@ -38,7 +39,8 @@ $:content
 <!-- Main Code Ends Here -->
 		</div>
 		<div id="footer">
-			Provided by <a href="mailto:niothiel@gmail.com">Niothiel</a>
+			Provided by <a href="mailto:niothiel@gmail.com">Niothiel</a><br>
+			Code on <a href="http://github.com/niothiel/VTCourseSearch">GitHub</a>, please fork it.
 		</div>
 	</div>
 	</body>
