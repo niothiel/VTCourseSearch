@@ -10,11 +10,16 @@
 					email: true
 				},
 				passwd: {
-					required: true
+					required: true,
+					minlength: 4
 				},
 				passwd2: {
 					required: true,
 					equalTo: "passwd"
+				},
+				phone: {
+					required: true,
+					phoneUS: true
 				}
 			},
 			messages: {
@@ -38,9 +43,15 @@
 			<td><input type=password name="passwd"></td>
 		</tr>
 		<tr>
+			<td>Phone #: </td>
+			<td><input type=text name="phone"></td>
+		</tr>
+        <!--
+		<tr>
 			<td>Confirm PW: </td>
 			<td><input type=password name="passwd2"></td>
 		</tr>
+		-->
 		<tr>
 			<td></td>
 			<td><input type=submit value="Register!"></td>
