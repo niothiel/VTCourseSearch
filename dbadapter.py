@@ -1,7 +1,7 @@
-from web.db import sqlquote
-import shelve
 import datetime
-from pymongo import MongoClient
+import hashlib
+import pymongo
+import shelve
 
 '''
 Data Layout:
@@ -15,7 +15,7 @@ Data Layout:
 
 '''
 
-class AbstractDBAdapter:
+class AbstractDBAdapter(object):
 	def does_email_exist(self, email):
 		raise TypeError('Not implemented.')
 
@@ -37,21 +37,33 @@ class AbstractDBAdapter:
 	def delete_course(self, email, crn, term):
 		raise TypeError('Not implemented.')
 
-class MongoDBAdapter:
+	def hash_passwd(self, passwd):
+		# Salted SHA-1 hashing of passwords.
+		hashobj = hashlib.sha1()
+		hashobj.update('vtcs')
+		hashobj.update(passwd)
+		return hashobj.hexdigest()
+
+class MongoDBAdapter(AbstractDBAdapter):
 	def __init__(self, host=None, port=None):
-		self.connection = MongoClient(host, port)
+		super(MongoDBAdapter, self).__init__()
+		self.connection = pymongo.MongoClient(host, port)
 		self.db = self.connection.vtcs.data
 
 	def does_email_exist(self, email):
 		return self._get_row(email) is not None
 
 	def is_login_valid(self, email, passwd):
-		return self.db.find_one({'email': email, 'passwd': passwd}) is not None
+		query = {
+			'email': email,
+			'passwd': self.hash_passwd(passwd)
+		}
+		return self.db.find_one(query) is not None
 
 	def add_user(self, email, passwd, phone):
 		row = {
 			'email': email,
-			'passwd': passwd,
+			'passwd': self.hash_passwd(passwd),
 			'courses': [],
 			'phone': phone
 		}
@@ -116,11 +128,6 @@ class MongoDBAdapter:
 
 		# Pulling the entry, modify it, then saving it back
 		row = self._get_row(email)
-
-		entry = {
-			'crn': crn,
-		    'term': term
-		}
 
 		# TODO: There has to be a better way to remove a specific element from a list...
 		to_remove = None
