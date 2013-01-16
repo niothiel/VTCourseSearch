@@ -2,9 +2,10 @@ import web
 from csadapter import *
 from dbadapter import *
 from validator import *
+from notifier import Notifier
+from checker import update_availability
 
-# For testing
-from cgi import escape
+from pprint import pprint
 
 urls = (
 	'/', 'index',
@@ -18,25 +19,23 @@ urls = (
 
 app = web.application(urls, globals())
 render = web.template.render('./templates/')
-#dbobj = web.database(dbn='mysql', db='VTCS')
-db = DBAdapter( web.database(dbn='mysql', db='VTCS') )
+# This one isn't completely compatible anymore
+#db = ShelfDBAdapter()
+db = MongoDBAdapter()
 cs = CSAdapter()
 valid = Validator()
+notifier = Notifier()
 
 # Workaround with Debug mode because of reloader issues
 if web.config.get('_session') is None:
-	session = web.session.Session(app, web.session.DiskStore('sessions'), initializer = {'login': 0})
+	session = web.session.Session(app, web.session.DiskStore('sessions'), initializer = {'login': False})
 	web.config._session = session
 else:
 	session = web.config._session
 
 class index:
 	def GET(self):
-		#body = render.index()
-		body = ""
-		body += "niothiel@gmail.com: " + str(valid.email("niothiel@gmail.com")) + "<br>"
-		body += "asdf'@gmail.com: " + str(valid.email("asdf'@gmail.com")) + "<br>"
-		body += "asdf@a: " + str(valid.email("asdf@a")) + "<br>"
+		body = render.index()
 		return render.skeleton(session, body)
 
 class login:
@@ -48,17 +47,12 @@ class login:
 		email = web.input().email
 		passwd = web.input().passwd
 
-		if not valid.email(email):
-			body = render.login_failure()
-
-		result = db.login(email, passwd)
-
-		if result:
-			session.login = 1
+		if db.is_login_valid(email, passwd):
+			session.login = True
 			session.email = email
 			body = render.login_success()
 		else:
-			session.login = 0
+			session.login = False
 			session.email = None
 			body = render.login_failure()
 		
@@ -66,26 +60,41 @@ class login:
 
 class logout:
 	def GET(self):
-		session.kill();
+		session.kill()
 		web.seeother('/')
 
 class register:
 	def GET(self):
-		body = render.register();
-		return render.skeleton(session, body);
+		body = render.register()
+		return render.skeleton(session, body)
 
 	def POST(self):
-		body = "Coming soon.<br>"
-		return render.skeleton(session, body);
+		email = web.input().email
+		passwd = web.input().passwd
+		phone = web.input().phone
+
+		body = '%s<br>%s<br>%s<br>' % (email, passwd, phone)
+
+		if not valid.email(email):
+			body += 'The email you entered is invalid!'
+		elif len(passwd) < 4:
+			body += 'The password must be at least 4 characters long.'
+		elif db.does_email_exist(email):
+			body += 'That email is already in use!'
+		else:
+			db.add_user(email, passwd, phone)
+			body += 'You have successfully registered! Please log in and add your courses.'
+
+		return render.skeleton(session, body)
 
 class about:
 	def GET(self):
-		body = render.about();
+		body = render.about()
 		return render.skeleton(session, body)
 
 class add:
 	def GET(self):
-		body = render.add(cs.getTerms())
+		body = render.add(cs.get_terms())
 		return render.skeleton(session, body)
 
 	def POST(self):
@@ -102,35 +111,39 @@ class add:
 				crns.append(crn)
 
 		email = session.email
+
+		print term, crns, email
 		for crn in crns:
-			result = db.addcourse(email, crn, term)
-			if not result:
-				body = "An error has occured (Duplicate course?)"
+			if not cs.crn_exists(term, crn):
+				body = "That doesn't appear to be a valid course number.. You entered: " + str(crn)
 				return render.skeleton(session, body)
-		
-		body = "All classes have been added successfully. Please check the results on the Status page."
-		return render.skeleton(session, body)
+
+			if not db.add_course(email, crn, term):
+				body = "An error has occured while trying to add the course to the datebase (Duplicate course?)"
+				return render.skeleton(session, body)
+
+		web.seeother('/status')
 
 class status:
 	def GET(self):
-		courses = db.getcourses(session.email)
+		courses = db.get_courses(session.email)
+		print 'Courses:', len(courses)
+		pprint(courses)
+		update_availability(cs, db, notifier, session.email)
 		
-		"""
-		coursecontent = ""
-
-		for course in courses:
-			strcourse = str(course)
-			avail = cs.crnAvailable(course['term'], course['crn'])
-			exist = cs.crnExists(course['term'], course['crn'])
-			coursecontent += escape(strcourse)
-			coursecontent += "Available?"
-			coursecontent += str(avail)
-			coursecontent += " Exists?"
-			coursecontent += str(exist)
-			coursecontent += "<br>"
-		"""
-		body = render.status(courses, cs)
+		body = render.status(courses)
 		return render.skeleton(session, body)
+
+	def POST(self):
+		for value in web.input().values():
+			crn, term = value.split(',')
+			crn = int(crn)
+			term = int(term)
+
+			print value, crn, term
+			db.delete_course(session.email, crn, term)
+
+		web.seeother('/status')
 
 if __name__ == "__main__":
 	app.run()
