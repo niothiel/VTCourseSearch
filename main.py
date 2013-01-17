@@ -35,7 +35,10 @@ else:
 
 class index:
 	def GET(self):
-		body = render.index()
+		users = db.db.count()
+		courses = len(db.get_courses())
+
+		body = render.index(users, courses)
 		return render.skeleton(session, body)
 
 class login:
@@ -129,7 +132,7 @@ class status:
 		courses = db.get_courses(session.email)
 		print 'Courses:', len(courses)
 		pprint(courses)
-		check_availability(cs, db, notifier, session.email)
+		#check_availability(cs, db, notifier, session.email)
 		
 		body = render.status(courses)
 		return render.skeleton(session, body)

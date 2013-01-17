@@ -119,7 +119,7 @@ class MongoDBAdapter(AbstractDBAdapter):
 		result = []
 
 		for row in self.db.find():
-			result.append(row['courses'])
+			result.extend(row['courses'])
 		return result
 
 	def delete_course(self, email, crn, term):
