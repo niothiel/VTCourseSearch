@@ -81,7 +81,7 @@ p, input, textarea {
 }
 
 
-#box-table-b
+#box-table-a
 {
         font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
         font-size: 12px;
@@ -92,7 +92,7 @@ p, input, textarea {
         border-top: 7px solid #9baff1;
         border-bottom: 7px solid #9baff1;
 }
-#box-table-b th
+#box-table-a th
 {
         font-size: 13px;
         font-weight: normal;
@@ -102,7 +102,7 @@ p, input, textarea {
         border-left: 1px solid #9baff1;
         color: #039;
 }
-#box-table-b td
+#box-table-a td
 {
         padding: 8px;
         background: #e8edff;

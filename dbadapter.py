@@ -142,7 +142,7 @@ class MongoDBAdapter(AbstractDBAdapter):
 		row['courses'].remove(to_remove)
 		self.db.save(row)
 
-
+# Older code, no longer compatible with the MongoDB implementation.
 class ShelfDBAdapter(AbstractDBAdapter):
 	def __init__(self, file_name='data.db'):
 		self.db = shelve.open(file_name, writeback=True)

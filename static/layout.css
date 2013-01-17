@@ -1,7 +1,7 @@
 * { 
 	margin: 0;
 	padding: 0;
-	outline: 0
+	outline: 0;
 }
 
 body
@@ -79,4 +79,37 @@ label.error
 	color: #EA5200;
 	font-weight: bold;
 	padding-left: 5px;
+}
+
+/* Table Layout Starts here*/
+#box-table-a
+{
+    font-size: 11px;
+    margin: 0px;
+    width: 480px;
+    text-align: center;
+    border-collapse: collapse;
+}
+#box-table-a th
+{
+    font-size: 13px;
+    font-weight: normal;
+    padding: 8px;
+    background: #ccc;
+    border-top: 2px solid #777;
+    border-bottom: 1px solid #fff;
+    color: #000;
+}
+#box-table-a td
+{
+    padding: 8px;
+    background: #eee;
+    border-bottom: 1px solid #fff;
+    color: #333;
+    border-top: 1px solid transparent;
+}
+#box-table-a tr:hover td
+{
+    background: #d0dafd;
+    color: #339;
 }
