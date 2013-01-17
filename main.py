@@ -3,7 +3,7 @@ from csadapter import *
 from dbadapter import *
 from validator import *
 from notifier import Notifier
-from checker import update_availability
+from checker import check_availability
 
 from pprint import pprint
 
@@ -129,7 +129,7 @@ class status:
 		courses = db.get_courses(session.email)
 		print 'Courses:', len(courses)
 		pprint(courses)
-		update_availability(cs, db, notifier, session.email)
+		check_availability(cs, db, notifier, session.email)
 		
 		body = render.status(courses)
 		return render.skeleton(session, body)
@@ -140,7 +140,7 @@ class status:
 			crn = int(crn)
 			term = int(term)
 
-			print value, crn, term
+			print 'Deleting Course:', value, crn, term
 			db.delete_course(session.email, crn, term)
 
 		web.seeother('/status')
