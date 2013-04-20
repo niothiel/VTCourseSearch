@@ -12,9 +12,9 @@ class CSAdapter:
 		if self.terms is None:
 			# TODO: Dynamically pull this information.
 			self.terms = [
-				{'value': 201301, 'text': 'Spring Semester 2013'},
-				{'value': 201306, 'text': 'Summer Session I 2013'},
-				{'value': 201307, 'text': 'Summer Session II 2013'}
+				{'value': 201309, 'text': 'Fall Semester 2013'},
+				{'value': 201307, 'text': 'Summer Session II 2013'},
+				{'value': 201306, 'text': 'Summer Session I 2013'}
 			]
 		return self.terms
 
